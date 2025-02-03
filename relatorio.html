@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,25 +10,13 @@
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
-    /* Estilos para o PDF */
+    /* Aumentar o tamanho da fonte para o PDF */
     @media print {
       body {
-        width: 210mm; /* Largura do A4 */
-        height: 297mm; /* Altura do A4 */
-        margin: 0 auto; /* Centraliza o conteúdo */
-        padding: 20mm; /* Margem interna */
-        font-size: 14px !important; /* Tamanho da fonte */
+        font-size: 14px !important; /* Ajuste o tamanho da fonte conforme necessário */
       }
       h1, h2, h3, h4, h5, h6 {
         font-size: 16px !important; /* Títulos um pouco maiores */
-      }
-    }
-
-    /* Estilos para o layout responsivo */
-    @media screen and (max-width: 600px) {
-      .page {
-        width: 100% !important; /* Ajusta a largura para dispositivos móveis */
-        padding: 10mm !important; /* Reduz o padding */
       }
     }
   </style>
@@ -41,6 +29,7 @@
       <h1 class="text-lg font-semibold">Check List Diário</h1>
     </div>
     <div class="flex items-center space-x-2 mt-2 sm:mt-0">
+      
       <img id="profileImage" src="./image/usuario.png" alt="Profile" class="h-8 w-8 rounded-full cursor-pointer">
     </div>
   </header>
