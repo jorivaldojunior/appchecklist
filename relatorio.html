@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist Diário</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    /* Aumentar o tamanho da fonte para o PDF */
+    @media print {
+      body {
+        font-size: 14px !important; /* Ajuste o tamanho da fonte conforme necessário */
+      }
+      h1, h2, h3, h4, h5, h6 {
+        font-size: 16px !important; /* Títulos um pouco maiores */
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <!-- Header -->
+  <header class="flex flex-wrap items-center justify-between px-4 py-3 bg-green-500 text-white">
+    <div class="flex items-center">
+      <img src="./image/logo2.jpg" alt="Hospital Logo" class="h-8 w-8 mr-2">
+      <h1 class="text-lg font-semibold">Check List Diário</h1>
+    </div>
+    <div class="flex items-center space-x-2 mt-2 sm:mt-0">
+      
+      <img id="profileImage" src="./image/usuario.png" alt="Profile" class="h-8 w-8 rounded-full cursor-pointer">
+    </div>
+  </header>
+
+  <!-- Modal para Cadastro de Usuário -->
+  <div id="userModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
+    <div class="bg-white p-6 rounded-lg w-96">
+      <h2 class="text-lg font-semibold mb-4">Cadastrar Usuário</h2>
+      <form id="userForm">
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Nome</label>
+          <input type="text" id="userName" class="w-full p-2 border rounded-lg" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Email</label>
+          <input type="email" id="userEmail" class="w-full p-2 border rounded-lg" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Endereço</label>
+          <input type="text" id="userAddress" class="w-full p-2 border rounded-lg" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Telefone</label>
+          <input type="tel" id="userPhone" class="w-full p-2 border rounded-lg" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium mb-1">Foto de Perfil</label>
+          <input type="file" id="userPhoto" class="w-full p-2 border rounded-lg" accept="image/*">
+        </div>
+        <div class="flex justify-end space-x-2">
+          <button type="button" id="closeModal" class="px-4 py-2 bg-gray-500 text-white rounded-lg">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-lg">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <main class="p-4 space-y-6">
+    <!-- Informações do Gerador -->
+    <section class="bg-white shadow-md rounded-lg p-4">
+      <h2 class="text-lg font-semibold mb-3">Passo 01: Informações do Gerador</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="text-sm"> <strong>Nº Série Motor:</strong> 8736053</label>        
+        </div>
+        <div>
+          <label class="text-sm"><strong>Nº Série Gerador:</strong> 1048468033</label>   
+        </div>
+        <div>
+          <label class="text-sm">Data</label>
+          <input id="data" type="date" class="w-full p-2 border rounded-lg">
+        </div>
+        <div>
+          <label class="text-sm">Hora</label>
+          <input id="hora" type="time" class="w-full p-2 border rounded-lg">
+        </div>
+        <div>
+          <label class="text-sm">Vistoriador:</label>
+          <select id="vistoriador" class="w-full p-2 border rounded-lg">
+            <option value="">Selecione</option>
+            <option value="Aldo">Aldo</option>
+            <option value="Jorivaldo">Jorivaldo</option>
+            <option value="Eliezer">Eliezer</option>
+            <option value="Ubiratan">Ubiratan</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm">Função:</label>
+          <select id="funcao" class="w-full p-2 border rounded-lg">
+            <option value="">Selecione</option>
+            <option value="Eletricista">Eletricista</option>
+            <option value="Gerente">Gerente</option>
+            <option value="Supervisor">Supervisor</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Combustíveis e Tanques -->
+    <section class="bg-white shadow-md rounded-lg p-4">
+      <h2 class="text-lg font-semibold mb-4">Passo 02: Combustíveis e Tanques</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm">1- Nível de Combustível do Tanque 01</label>
+          <input id="nivel_tanque1" type="text" class="w-full p-2 border rounded-lg" placeholder="Quantidade litros">
+        </div>
+        <div>
+          <label class="text-sm">2- Torneira Tanque 01</label>
+          <div class="flex items-center space-x-4">
+            <label class="flex items-center space-x-1">
+              <input type="radio" name="torneira_tanque1" value="aberta">
+              <span>Aberta</span>
+            </label>
+            <label class="flex items-center space-x-1">
+              <input type="radio" name="torneira_tanque1" value="fechada">
+              <span>Fechada</span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="text-sm">3- Nível de Combustível do Tanque 02</label>
+          <input id="nivel_tanque2" type="text" class="w-full p-2 border rounded-lg" placeholder="Quantidade litros">
+        </div>
+        <div>
+          <label class="text-sm">4- Torneira Tanque 02</label>
+          <div class="flex items-center space-x-4">
+            <label class="flex items-center space-x-1">
+              <input type="radio" name="torneira_tanque2" value="aberta">
+              <span>Aberta</span>
+            </label>
+            <label class="flex items-center space-x-1">
+              <input type="radio" name="torneira_tanque2" value="fechada">
+              <span>Fechada</span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label class="text-sm">5- Torneira Abastecimento do Gerador</label>
+          <div class="flex items-center space-x-4">
+            <label class="flex items-center space-x-1">
+              <input type="radio" name="torneira_abastecimento" value="aberta">
+              <span>Aberta</span>
+            </label>
+            <label class="flex items-center space-x-1">
+              <input type="radio" name="torneira_abastecimento" value="fechada">
+              <span>Fechada</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Status do Gerador -->
+    <section class="bg-white shadow-md rounded-lg p-4">
+      <h2 class="text-lg font-semibold mb-4">Passo 03: Status do Gerador</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm">6- Corrente de Fase</label>
+          <input id="corrente_fase" type="text" class="w-full p-2 border rounded-lg" placeholder="389 A">
+        </div>
+        <div>
+          <label class="text-sm">7- Tensão Fase - Neutro</label>
+          <input id="tensao_fase_neutro" type="text" class="w-full p-2 border rounded-lg" placeholder="220 V">
+        </div>
+        <div>
+          <label class="text-sm">8- Tensão Fase - Fase</label>
+          <input id="tensao_fase_fase" type="text" class="w-full p-2 border rounded-lg" placeholder="380 V">
+        </div>
+        <div>
+          <label class="text-sm">9- Potência KW</label>
+          <input id="potencia_kw" type="text" class="w-full p-2 border rounded-lg" placeholder="220 KW">
+        </div>
+        <div>
+          <label class="text-sm">Disjuntor Geral Funcionando Corretamente?</label>
+          <select id="disjuntor_geral" class="w-full p-2 border rounded-lg">
+            <option value="sim">Sim</option>
+            <option value="não">Não</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm">Algum Sinal de Alerta Sonoro ou visual?</label>
+          <select id="sinal_alerta" class="w-full p-2 border rounded-lg">
+            <option value="sim">Sim</option>
+            <option value="não">Não</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Motor -->
+    <section class="bg-white shadow-md rounded-lg p-4">
+      <h2 class="text-lg font-semibold mb-4">Passo 04: Verificar Itens no Motor</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm">10- Nível de Combustível do Motor (%)</label>
+          <input id="nivel_combustivel_motor" type="text" class="w-full p-2 border rounded-lg" placeholder="67 %, 246 Litros...">
+        </div>
+        <div>
+          <label class="text-sm">11- Bateria (Volts)</label>
+          <input id="bateria_volts" type="text" class="w-full p-2 border rounded-lg" placeholder="27.7">
+        </div>
+        <div>
+          <label class="text-sm">12- Tempo de Operação</label>
+          <input id="tempo_operacao" type="text" class="w-full p-2 border rounded-lg" placeholder="1698 h, 12 m">
+        </div>
+        <div>
+          <label class="text-sm">13- Número de Partidas</label>
+          <input id="numero_partidas" type="text" class="w-full p-2 border rounded-lg" placeholder="1698">
+        </div>
+        <div>
+          <label class="text-sm">14- Troca de Óleo e Filtro</label>
+          <input id="troca_oleo_filtro" type="text" class="w-full p-2 border rounded-lg" placeholder="127 h, 2 m">
+        </div>
+        <div>
+          <label class="text-sm">15- Nível do Óleo</label>
+          <div class="flex items-center space-x-4">
+            <label class="flex items-center space-x-1">
+              <input type="radio" name="nivel_oleo" value="bom">
+              <span>Bom</span>
+            </label>
+            <label class="flex items-center space-x-1">
+              <input type="radio" name="nivel_oleo" value="ruim">
+              <span>Ruim</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Aspectos Gerais -->
+    <section class="bg-white shadow-md rounded-lg p-4">
+      <h2 class="text-lg font-semibold mb-4">Passo 05: Verificar Aspectos (5S)</h2>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm">Matos</label>
+          <select id="matos" class="w-full p-2 border rounded-lg">
+            <option value="sim">Sim</option>
+            <option value="não">Não</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm">Sujidade</label>
+          <select id="sujidade" class="w-full p-2 border rounded-lg">
+            <option value="sim">Sim</option>
+            <option value="não">Não</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm">Objetos</label>
+          <select id="objetos" class="w-full p-2 border rounded-lg">
+            <option value="sim">Sim</option>
+            <option value="não">Não</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm">Escada</label>
+          <select id="escada" class="w-full p-2 border rounded-lg">
+            <option value="sim">Sim</option>
+            <option value="não">Não</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- Botões -->
+    <div class="flex flex-wrap justify-end space-y-4 sm:space-y-0 sm:space-x-4">
+      <button id="btnFechar" class="w-full sm:w-auto px-4 py-2 bg-red-500 text-white rounded-lg">Fechar</button>
+      <button id="btnEnviar" class="w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded-lg">Gerar PDF</button>
+    </div>
+  </main>
+
+  <script src="./script.js"></script>
+</body>
+</html>

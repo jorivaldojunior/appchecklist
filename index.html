@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Guararapes - Tela Inicial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "custom-bg": "#22C55E",  // Verde suave para combinar com o tema
+                        "custom-blue": "#1D4ED8",
+                        "custom-button": "#1D4ED8",
+                        "custom-button-hover": "#22C55E",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "Arial", "sans-serif"],
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body class="bg-custom-bg min-h-screen flex items-center justify-center">
+    <div class="text-center">
+        <!-- Título centralizado -->
+    
+        <h2 class="text-3xl font-bold text-center text-custom-dark-gray mb-6 colors text-white">Check List Gerador!</h2>
+        <!-- Imagem centralizada -->
+        <img src="./image/logo2.jpg" alt="Hospital Guararapes" class="mx-auto mb-8 w-full max-w-xs md:max-w-md lg:max-w-lg">
+
+        <!-- Botão "Avançar" -->
+        <a href="./relatorio.html" class="bg-custom-button text-white py-3 px-8 rounded-lg hover:bg-custom-button-hover focus:outline-none focus:ring-2 focus:ring-custom-button focus:ring-opacity-50 transition duration-200">
+            Avançar
+        </a>
+    </div>
+</body>
+</html>
+
+
+
