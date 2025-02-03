@@ -154,9 +154,7 @@ document.getElementById("btnEnviar").addEventListener("click", () => {
         const imgWidth = 210; // Largura do A4 em mm
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-        // Adicionar título ao PDF
-        pdf.setFontSize(18);
-        pdf.text("Relatório Diário do Gerador", 105, 15, { align: "center" });
+       
 
 
         // Ajusta a altura da imagem para caber em uma única página
